@@ -6,6 +6,7 @@ glpkvers = "4.52"
 glpkname = "glpk-$glpkvers"
 glpkdllname = "glpk_$(replace(glpkvers, ".", "_"))"
 glpkdllnamew(w) = "$(glpkdllname)_$(w)bit"
+glpkbrewname = "glpk$(replace(glpkvers, ".", ""))"
 
 glpkvalidate(name, handle) = (bytestring(ccall(dlsym(handle, :glp_version), Ptr{Uint8}, ())) == glpkvers)
 glpkdep = library_dependency("libglpk", aliases = [glpkdllnamew(WORD_SIZE)], validate = glpkvalidate)
@@ -27,7 +28,7 @@ provides(BuildProcess, {
 # Homebrew (OS X section)
 @osx_only begin
     using Homebrew
-    provides(Homebrew.HB, "glpk", glpkdep, os = :Darwin)
+    provides(Homebrew.HB, glpkbrewname, glpkdep, os = :Darwin)
 end
 
 # Windows
